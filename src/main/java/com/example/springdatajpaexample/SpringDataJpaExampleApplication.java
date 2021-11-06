@@ -1,6 +1,7 @@
 package com.example.springdatajpaexample;
 
 import com.example.springdatajpaexample.entity.BookEntity;
+import com.example.springdatajpaexample.entity.SomeEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -70,6 +71,20 @@ public class SpringDataJpaExampleApplication {
         bookEntity1.setCreationTime(LocalDateTime.now().plusDays(2));
         bookEntity1.setName("El libro del mas alla, pero mas aca");
         entityManager.persist(bookEntity1);
+        return null;
+      });
+
+      transactionTemplate.execute(status -> {
+        SomeEntity someEntity = new SomeEntity();
+        someEntity.setName("Hola");
+        entityManager.persist(someEntity);
+        return null;
+      });
+
+      transactionTemplate.execute(status -> {
+        var someEntity = entityManager.createNamedQuery("SomeEntity.getAll", SomeEntity.class)
+          .getSingleResult();
+        System.out.println(someEntity);
         return null;
       });
     };
